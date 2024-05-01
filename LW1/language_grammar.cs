@@ -59,7 +59,7 @@ namespace FALSL
         private void Check_grammar(List<string> lexemes)
         {// если количество пар скобок не совпадает с количеством операций, тогда есть грамматическая ошибка
             int counter = 0;
-            int open_brackets_counter = 0,close_brackets_counter = 0, ops_counter = 0;
+            int open_brackets_counter = 0, close_brackets_counter = 0, ops_counter = 0;
             for (int i = 0; i < lexemes[0].Length; i++)
             {
                 if (lexemes[0][i] == '(')
@@ -78,7 +78,7 @@ namespace FALSL
                 }
             for (int i = 0; i < lexemes[0].Length; i++)
             {
-                if (lexemes[0][i] == '-' || lexemes[0][i] == '+'|| lexemes[0][i] == '*' || lexemes[0][i] == '_' || lexemes[0][i] == '.' || lexemes[0][i] == '\'' || lexemes[0][i] == '\"' || lexemes[0][i] == ',' || lexemes[0][i] == '[' || lexemes[0][i] == ']' || lexemes[0][i] == '{' || lexemes[0][i] == '}' || lexemes[0][i] == '&' || lexemes[0][i] == '?' || (Convert.ToChar(lexemes[0][i]) >= 'a' && Convert.ToChar(lexemes[0][i]) <= 'z'))
+                if (lexemes[0][i] == '-' || lexemes[0][i] == '+'|| lexemes[0][i] == '*' || lexemes[0][i] == '_' || lexemes[0][i] == '=' || lexemes[0][i] == '.' || lexemes[0][i] == '\'' || lexemes[0][i] == '\"' || lexemes[0][i] == ',' || lexemes[0][i] == '[' || lexemes[0][i] == ']' || lexemes[0][i] == '{' || lexemes[0][i] == '}' || lexemes[0][i] == '&' || lexemes[0][i] == '?' || (Convert.ToChar(lexemes[0][i]) >= 'a' && Convert.ToChar(lexemes[0][i]) <= 'z'))
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
                 if (counter < 0)
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
@@ -161,21 +161,24 @@ namespace FALSL
             {
             return;
             }
-            if (formula[0] == '(')
+            if (formula[0] == '(' && formula.Length > 1)//added
             {
-            if (formula[1] == '!')
-            { 
-                for (int i = 2; i < formula.Length-1; i++) 
-                {
-                buf += formula[i];
-                }
-                    if (lexemes.IndexOf(buf) == -1)
+                if (formula[1] == '!')
+                { 
+                    for (int i = 2; i < formula.Length-1; i++) 
                     {
-                        lexemes.Add(buf);
+                    buf += formula[i];
                     }
-                //Console.WriteLine(buf);
-                 Rec_counter_formulas(buf,ref lexemes);
+                        if (lexemes.IndexOf(buf) == -1)
+                        {
+                            lexemes.Add(buf);
+                        }
+                    //Console.WriteLine(buf);
+                     Rec_counter_formulas(buf,ref lexemes);
             }
+            else if(formula[0] == '(' && formula.Length == 1) //added
+                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+                
                 if (formula[1] == '(')
                 {
                     int i = 1, counter = 1;
@@ -232,7 +235,7 @@ namespace FALSL
                 }
            
                 
-                }
+            }
             
         }
     }

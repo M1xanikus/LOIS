@@ -14,15 +14,21 @@ namespace InputExc
             {
                 if (formula == "") throw new ArgumentException("Ошибка ввода: введённая строка пустая!");
                 if (formula.All(c => c == ' ')) throw new ArgumentException("Ошибка ввода: строка заполнена пробелами!");
-                if (formula[0] == ' ')
+                for (int i = 0; i < formula.Length; i++)
                 {
-                    while (formula.IndexOf(' ', 0) != -1)
-                        formula = formula.Remove(0, 1);
+                    if (formula[i] == ' ')
+                    {
+                        formula = formula.Replace(" ", "");
+                        break;
+                    }
                 }
-                if (formula[formula.Length-1] == ' ')
+                for (int i = 0; i < formula.Length; i++)
                 {
-                    while (formula.LastIndexOf(' ', formula.Length-1) != -1)
-                        formula = formula.Remove(formula.Length-1, 1);
+                    if (formula[i] == '\t')
+                    {
+                        formula = formula.Replace("\t", "");
+                        break;
+                    }
                 }
             }
             catch(ArgumentException e) { throw new ArgumentException(e.Message); }

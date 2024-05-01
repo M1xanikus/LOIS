@@ -6,9 +6,9 @@ namespace Menu
     {
         static void Main(string[] args)
         {
-            Formula_of_abbreviated_statement_logic a = new("(A->A) ");
-            a.Print_subformulas();
-            a.Print_count_of_subformulas();
+            //Formula_of_abbreviated_statement_logic a = new("(A->A) ");
+            //a.Print_subformulas();
+            //a.Print_count_of_subformulas();
             Random rand = new Random();
             string choose = "";
             List<string> formulas = new List<string>() {"(A->1)","(!A)","A","((!(A~B))/\\C)","1", "((!(((A->(!B))~(C\\/D))/\\((!E)~(F->(!G)))))->(N/\\(K\\/L)))","((!(A~B))->(C\\/D))","(R->((I\\/D)/\\(O~R)))","(A/\\A)" };
