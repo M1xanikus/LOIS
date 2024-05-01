@@ -6,15 +6,16 @@ namespace Menu
     {
         static void Main(string[] args)
         {
-            Formula_of_abbreviated_statement_logic a = new("(A->B) ");
+            Formula_of_abbreviated_statement_logic a = new("(A->A) ");
             a.Print_subformulas();
             a.Print_count_of_subformulas();
             Random rand = new Random();
-            List<string> formulas = new List<string>() {"(A->1)","(!A)","A","((!(A~B))/\\C)","1", "((!(((A->(!B))~(C\\/D))/\\((!E)~(F->(!G)))))->(N/\\(K\\/L)))" };
-            while (true) 
+            string choose = "";
+            List<string> formulas = new List<string>() {"(A->1)","(!A)","A","((!(A~B))/\\C)","1", "((!(((A->(!B))~(C\\/D))/\\((!E)~(F->(!G)))))->(N/\\(K\\/L)))","((!(A~B))->(C\\/D))","(R->((I\\/D)/\\(O~R)))","(A/\\A)" };
+            while (choose != "3") 
             {
-                Console.WriteLine("\n1. Ввести формулу сокращенного языка логики высказываний для подсчета подформул\n2. Запустить тестирование пользователя");
-                string choose;
+                Console.WriteLine("\n1. Ввести формулу сокращенного языка логики высказываний для подсчета подформул\n2. Запустить тестирование пользователя\n3. Выход");
+                
                 choose = Console.ReadLine();
                 switch (choose)
                 {
@@ -37,8 +38,7 @@ namespace Menu
                             Console.WriteLine($"Ответ верный! ({formula_2.Count_of_subformulas})");
                         else Console.WriteLine($"Ответ неверный! ({formula_2.Count_of_subformulas})");
                         break;
-                   
-        
+
                     default:
                         break;
   
