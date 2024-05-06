@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FALSL
-{
+{// Сделано Михаилом Чаплей и Алексеем Марченко
     public class Language_grammar
     {
         public Language_grammar(string formula, ref List<string> lexemes)
@@ -57,106 +57,119 @@ namespace FALSL
             }
         }
         private void Check_grammar(List<string> lexemes)
-        {// если количество пар скобок не совпадает с количеством операций, тогда есть грамматическая ошибка
+        {   
             int counter = 0;
             int open_brackets_counter = 0, close_brackets_counter = 0, ops_counter = 0;
-            for (int i = 0; i < lexemes[0].Length; i++)
-            {
-                if (lexemes[0][i] == '(')
-                    open_brackets_counter++;
-                if(lexemes[0][i] == ')')
-                    close_brackets_counter++;
-                if (lexemes[0][i] == '~' || lexemes[0][i] == '>' || lexemes[0][i] == '/'|| lexemes[0][i] == '!' || Convert.ToChar(lexemes[0][i]) == '\\')
-                    ops_counter++;  
-            }
-            if ((ops_counter != (open_brackets_counter+close_brackets_counter)/2) || (open_brackets_counter != close_brackets_counter))
-                throw new Exception("Ошибка: формула не соответствует грамматике!");
-            if (lexemes[0].Length > 1)
-                if ((Convert.ToChar(lexemes[0][0]) >= 'A' && Convert.ToChar(lexemes[0][0]) <= 'Z') && ((Convert.ToChar(lexemes[0][1]) >= 'A' && Convert.ToChar(lexemes[0][1]) <= 'Z') || char.IsNumber(lexemes[0][1])))
+    
+                for (int i = 0; i < lexemes[0].Length; i++)
                 {
-                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+                    if ((lexemes[0][i] >= 'а' && lexemes[0][i] <= 'я') || (lexemes[0][i] >= 'А' && lexemes[0][i] <= 'Я'))
+                        throw new Exception("Ошибка: формула не соответствует грамматике!"); //Проверка на ввод кириллицы
+                    if (lexemes[0][i] == '(')
+                        open_brackets_counter++;
+                    if (lexemes[0][i] == ')')
+                        close_brackets_counter++;
+                    if (lexemes[0][i] == '~' || lexemes[0][i] == '>' || lexemes[0][i] == '/' || lexemes[0][i] == '!' || Convert.ToChar(lexemes[0][i]) == '\\')
+                        ops_counter++;
                 }
-            for (int i = 0; i < lexemes[0].Length; i++)
-            {
-                if (lexemes[0][i] == '-' || lexemes[0][i] == '+'|| lexemes[0][i] == '*' || lexemes[0][i] == '_' || lexemes[0][i] == '=' || lexemes[0][i] == '.' || lexemes[0][i] == '\'' || lexemes[0][i] == '\"' || lexemes[0][i] == ',' || lexemes[0][i] == '[' || lexemes[0][i] == ']' || lexemes[0][i] == '{' || lexemes[0][i] == '}' || lexemes[0][i] == '&' || lexemes[0][i] == '?' || (Convert.ToChar(lexemes[0][i]) >= 'a' && Convert.ToChar(lexemes[0][i]) <= 'z'))
+                if ((ops_counter != (open_brackets_counter + close_brackets_counter) / 2) || (open_brackets_counter != close_brackets_counter))
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
-                if (counter < 0)
-                    throw new Exception("Ошибка: формула не соответствует грамматике!");
-                if (lexemes[0][i] == '(')
+            // если количество пар скобок не совпадает с количеством операций, тогда есть грамматическая ошибка
+                if (lexemes[0].Length > 1)
                 {
-                    counter++;
-                    continue;
-                }
-                if (lexemes[0][i] == ')')
-                {
-                    counter--;
-                    continue;
-                }
-            }
-            counter = 0;
-            for (int i = lexemes.Count-1; i>-1; i-- )
-            {
-                if (lexemes[i].Length == 1)
-                {
-                    if (Convert.ToChar(lexemes[i]) >= 'a' && Convert.ToChar(lexemes[i]) <= 'z') 
-                    throw new Exception("Ошибка: формула не соответствует грамматике!");
-                }
-                if (char.IsDigit(lexemes[i][0]))
-                    if (!(lexemes[i][0] == '0' || lexemes[i][0] == '1'))
+                    if ((Convert.ToChar(lexemes[0][0]) >= 'A' && Convert.ToChar(lexemes[0][0]) <= 'Z') && ((Convert.ToChar(lexemes[0][1]) >= 'A' && Convert.ToChar(lexemes[0][1]) <= 'Z') || char.IsNumber(lexemes[0][1])))
                         throw new Exception("Ошибка: формула не соответствует грамматике!");
-                if (lexemes[i][0] == '(' && lexemes[i][lexemes[i].Length-1] == ')')
-                {
-                    for (int j = 1; j < lexemes[i].Length - 1; j++)
-                    {
-                        if (lexemes[i][j] == '(')
-                        {
-                            counter++;
-                        }
-                        if (lexemes[i][j] == ')')
-                        {
-                            counter--;
-                        }
-                        if (counter != 0 && j == lexemes[i].Length - 2)//fix
-                        {
-                            throw new Exception("Ошибка: формула не соответствует грамматике!");
-                        }
-                        if (lexemes[i][j] == '!')
-                        {
-                            if (Convert.ToChar(lexemes[i][j + 1]) >= 'a' && Convert.ToChar(lexemes[i][j + 1]) <= 'z')
-                                throw new Exception("Ошибка: формула не соответствует грамматике!");
-                            if (lexemes[i][j + 1] == '~' || lexemes[i][j + 1] == '>' || lexemes[i][j + 1] == '/' || Convert.ToChar(lexemes[i][j + 1]) == '\\')
-                                throw new Exception("Ошибка: формула не соответствует грамматике!");
-                        }
-                        if ((Convert.ToChar(lexemes[i][j]) >= 'A' && Convert.ToChar(lexemes[i][j]) <= 'Z') && ((Convert.ToChar(lexemes[i][j + 1]) >= 'A' && Convert.ToChar(lexemes[i][j + 1]) <= 'Z')|| char.IsDigit(lexemes[i][j+1])))
-                        {
-                            throw new Exception("Ошибка: формула не соответствует грамматике!");
-                        }
-                        if(((Convert.ToChar(lexemes[i][j]) >= 'A' && Convert.ToChar(lexemes[i][j]) <= 'Z') || Convert.ToChar(lexemes[i][j]) == '1' || Convert.ToChar(lexemes[i][j]) == '0') && Convert.ToChar(lexemes[i][j+1]) == ')'&& Convert.ToChar(lexemes[i][j - 1]) == '(')
-                        {
-                            throw new Exception("Ошибка: формула не соответствует грамматике!");
-                        }
-                        if (Convert.ToChar(lexemes[i][j]) >= 'A' && Convert.ToChar(lexemes[i][j]) <= 'Z' || Convert.ToChar(lexemes[i][j]) == ')' && j + 1 <= lexemes[i].Length - 1)
-                        {
-                            if ((Convert.ToChar(lexemes[i][j + 1]) == '~' || Convert.ToChar(lexemes[i][j + 1]) == '>' || Convert.ToChar(lexemes[i][j + 1]) == '/' || Convert.ToChar(lexemes[i][j + 1]) == '\\') && (Convert.ToChar(lexemes[i][j + 2]) == '~' || Convert.ToChar(lexemes[i][j + 2]) == '>' || Convert.ToChar(lexemes[i][j + 2]) == '/' || Convert.ToChar(lexemes[i][j + 2]) == '\\'))
-                                throw new Exception("Ошибка: формула не соответствует грамматике!");
-                            if ((Convert.ToChar(lexemes[i][j + 1]) == '~' || Convert.ToChar(lexemes[i][j + 1]) == '>' || Convert.ToChar(lexemes[i][j + 1]) == '/' || Convert.ToChar(lexemes[i][j + 1]) == '\\') && Convert.ToChar(lexemes[i][j + 2]) == ')')
-                                throw new Exception("Ошибка: формула не соответствует грамматике!");
-                        }
-                        if (char.IsDigit(lexemes[i][j]))
-                            if (!(lexemes[i][j] == '0' || lexemes[i][j] == '1'))
-                                throw new Exception("Ошибка: формула не соответствует грамматике!");
-                        
-                    }
-                    counter = 0;
+                    if(Convert.ToChar(lexemes[0][0]) == '(' && (Convert.ToChar(lexemes[0][1]) == '~' || Convert.ToChar(lexemes[0][1]) == '>' || Convert.ToChar(lexemes[0][1]) == '/' || Convert.ToChar(lexemes[0][1]) == '\\'))
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");
                 }
-                if (lexemes[i][0] != '(' && lexemes[i][lexemes[i].Length - 1] == ')' || lexemes[i][0] == '(' && lexemes[i][lexemes[i].Length - 1] != ')')
-                    throw new Exception("Ошибка: формула не соответствует грамматике!");
-            }
+                for (int i = 0; i < lexemes[0].Length; i++)
+                {
+                    if (lexemes[0][i] == '-' || lexemes[0][i] == '+' || lexemes[0][i] == '*' || lexemes[0][i] == '_' ||
+                    lexemes[0][i] == '`' || lexemes[0][i] == '@' || lexemes[0][i] == '#' || lexemes[0][i] == '$' || lexemes[0][i] == '№' || lexemes[0][i] == ':' || lexemes[0][i] == ';' || lexemes[0][i] == '<' || lexemes[0][i] == '%' || lexemes[0][i] == '^'
+                    || lexemes[0][i] == '=' || lexemes[0][i] == '.' || lexemes[0][i] == '\'' || lexemes[0][i] == '\"' || lexemes[0][i] == ',' || lexemes[0][i] == '[' || lexemes[0][i] == ']' 
+                    || lexemes[0][i] == '{' || lexemes[0][i] == '}' || lexemes[0][i] == '&' || lexemes[0][i] == '?' || (Convert.ToChar(lexemes[0][i]) >= 'a' && Convert.ToChar(lexemes[0][i]) <= 'z'))
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");// проверка на ввод арифметических операций и др знаков
+                    if (counter < 0)
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");
+                    if (lexemes[0][i] == '(')
+                    {
+                        counter++;
+                        continue;
+                    }
+                    if (lexemes[0][i] == ')')
+                    {
+                        counter--;
+                        continue;
+                    }
+                }
+                counter = 0;
+                for (int i = lexemes.Count - 1; i > -1; i--)
+                {
+                    if (lexemes[i].Length == 1)
+                    {
+                        if (Convert.ToChar(lexemes[i]) >= 'a' && Convert.ToChar(lexemes[i]) <= 'z')
+                            throw new Exception("Ошибка: формула не соответствует грамматике!");
+                    }
+                    if (char.IsDigit(lexemes[i][0]))
+                        if (!(lexemes[i][0] == '0' || lexemes[i][0] == '1'))
+                            throw new Exception("Ошибка: формула не соответствует грамматике!");
+                    if (lexemes[i][0] == '(' && lexemes[i][lexemes[i].Length - 1] == ')')
+                    {
+                        for (int j = 1; j < lexemes[i].Length - 1; j++)
+                        {
+                            if (lexemes[i][j] == '(')
+                            {
+                                counter++;
+                            }
+                            if (lexemes[i][j] == ')')
+                            {
+                                counter--;
+                            }
+                            if (counter != 0 && j == lexemes[i].Length - 2)//fix
+                            {
+                                throw new Exception("Ошибка: формула не соответствует грамматике!");
+                            }
+                            if (lexemes[i][j] == '!')
+                            {
+                                if (Convert.ToChar(lexemes[i][j + 1]) >= 'a' && Convert.ToChar(lexemes[i][j + 1]) <= 'z')
+                                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+                                if (lexemes[i][j + 1] == '~' || lexemes[i][j + 1] == '>' || lexemes[i][j + 1] == '/' || Convert.ToChar(lexemes[i][j + 1]) == '\\')
+                                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+                            }
+                            if ((Convert.ToChar(lexemes[i][j]) >= 'A' && Convert.ToChar(lexemes[i][j]) <= 'Z') && ((Convert.ToChar(lexemes[i][j + 1]) >= 'A' && Convert.ToChar(lexemes[i][j + 1]) <= 'Z') || char.IsDigit(lexemes[i][j + 1])))
+                            {
+                                throw new Exception("Ошибка: формула не соответствует грамматике!");
+                            }
+                            if (((Convert.ToChar(lexemes[i][j]) >= 'A' && Convert.ToChar(lexemes[i][j]) <= 'Z') || Convert.ToChar(lexemes[i][j]) == '1' || Convert.ToChar(lexemes[i][j]) == '0') && Convert.ToChar(lexemes[i][j + 1]) == ')' && Convert.ToChar(lexemes[i][j - 1]) == '(')
+                            {
+                                throw new Exception("Ошибка: формула не соответствует грамматике!");
+                            }
+                            if (Convert.ToChar(lexemes[i][j]) >= 'A' && Convert.ToChar(lexemes[i][j]) <= 'Z' || Convert.ToChar(lexemes[i][j]) == ')' && j + 1 <= lexemes[i].Length - 1)
+                            {
+                                if ((Convert.ToChar(lexemes[i][j + 1]) == '~' || Convert.ToChar(lexemes[i][j + 1]) == '>' || Convert.ToChar(lexemes[i][j + 1]) == '/' || Convert.ToChar(lexemes[i][j + 1]) == '\\') && (Convert.ToChar(lexemes[i][j + 2]) == '~' || Convert.ToChar(lexemes[i][j + 2]) == '>' || Convert.ToChar(lexemes[i][j + 2]) == '/' || Convert.ToChar(lexemes[i][j + 2]) == '\\'))
+                                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+                                if ((Convert.ToChar(lexemes[i][j + 1]) == '~' || Convert.ToChar(lexemes[i][j + 1]) == '>' || Convert.ToChar(lexemes[i][j + 1]) == '/' || Convert.ToChar(lexemes[i][j + 1]) == '\\') && Convert.ToChar(lexemes[i][j + 2]) == ')')
+                                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+                            }
+                            if (char.IsDigit(lexemes[i][j]))
+                                if (!(lexemes[i][j] == '0' || lexemes[i][j] == '1'))
+                                    throw new Exception("Ошибка: формула не соответствует грамматике!");
+
+                        }
+                        counter = 0;
+                    }
+                    if (lexemes[i][0] != '(' && lexemes[i][lexemes[i].Length - 1] == ')' || lexemes[i][0] == '(' && lexemes[i][lexemes[i].Length - 1] != ')')
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");
+                }
+            
+           
+
         }
         private void Rec_counter_formulas(string formula, ref List<string> lexemes)
         {  
             
             string buf = "";
+            try { 
             if (((formula[0] >= 'A' && formula[0] <= 'Z') || formula[0] == '1' || formula[0] == '0') && formula.Length == 1)
             {
             return;
@@ -178,7 +191,8 @@ namespace FALSL
             }
             else if(formula[0] == '(' && formula.Length == 1) //added
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
-                
+             else if (formula[0] == '(' && (formula[1] >= 'A' && formula[0] <= 'Z') && formula.Length == 2) //added
+                    throw new Exception("Ошибка: формула не соответствует грамматике!");
                 if (formula[1] == '(')
                 {
                     int i = 1, counter = 1;
@@ -236,7 +250,8 @@ namespace FALSL
            
                 
             }
-            
+            }
+            catch (IndexOutOfRangeException) { throw new IndexOutOfRangeException("Ошибка: Выход за пределы массива при вычислении!"); }
         }
     }
 }

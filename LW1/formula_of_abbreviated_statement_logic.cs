@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InputExc;
 namespace FALSL
-{
+{// Сделано Михаилом Чаплей и Алексеем Марченко
     public class Formula_of_abbreviated_statement_logic
     {
         public Formula_of_abbreviated_statement_logic(string formula) 

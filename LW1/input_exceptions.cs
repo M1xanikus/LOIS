@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace InputExc
-{
+{// Сделано Михаилом Чаплей и Алексеем Марченко
     internal class InputExceptions
     {
         public InputExceptions(ref string formula) 
