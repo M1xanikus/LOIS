@@ -84,6 +84,18 @@ namespace FALSL
                 }
                 for (int i = 0; i < lexemes[0].Length; i++)
                 {
+                if (i != lexemes[0].Length - 1)
+                    if((lexemes[0][i] == '0' || lexemes[0][i] == '1') && (lexemes[0][i+1] == '0' || lexemes[0][i+1] == '1'))
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");//LASTFIX
+                if (i != lexemes[0].Length - 1 && lexemes[0][i] == ')')
+                    if (lexemes[0][i + 1] == '(')
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");
+                if (i != lexemes[0].Length - 1)
+                    if (Convert.ToChar(lexemes[0][i]) >= 'A' && Convert.ToChar(lexemes[0][i]) <= 'Z' && lexemes[0][i + 1] == '!')
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");
+                if (i != lexemes[0].Length - 1)
+                    if ((lexemes[0][i] == '0' || lexemes[0][i] == '1') && (Convert.ToChar(lexemes[0][i+1]) >= 'A' && Convert.ToChar(lexemes[0][i+1]) <= 'Z'))
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");
                     if (lexemes[0][i] == '-' || lexemes[0][i] == '+' || lexemes[0][i] == '*' || lexemes[0][i] == '_' ||
                     lexemes[0][i] == '`' || lexemes[0][i] == '@' || lexemes[0][i] == '#' || lexemes[0][i] == '$' || lexemes[0][i] == '№' || lexemes[0][i] == ':' || lexemes[0][i] == ';' || lexemes[0][i] == '<' || lexemes[0][i] == '%' || lexemes[0][i] == '^'
                     || lexemes[0][i] == '=' || lexemes[0][i] == '.' || lexemes[0][i] == '\'' || lexemes[0][i] == '\"' || lexemes[0][i] == ',' || lexemes[0][i] == '[' || lexemes[0][i] == ']' 
@@ -170,7 +182,7 @@ namespace FALSL
             
             string buf = "";
             try { 
-            if (((formula[0] >= 'A' && formula[0] <= 'Z') || formula[0] == '1' || formula[0] == '0') && formula.Length == 1)
+            if ((formula[0] >= 'A' && formula[0] <= 'Z') || (formula[0] == '1' || formula[0] == '0') && formula.Length == 1)
             {
             return;
             }
@@ -191,7 +203,7 @@ namespace FALSL
             }
             else if(formula[0] == '(' && formula.Length == 1) //added
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
-             else if (formula[0] == '(' && (formula[1] >= 'A' && formula[0] <= 'Z') && formula.Length == 2) //added
+             else if (formula[0] == '(' && (formula[1] >= 'A' && formula[1] <= 'Z') && formula.Length == 2) //added
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
                 if (formula[1] == '(')
                 {
@@ -223,7 +235,7 @@ namespace FALSL
                     if (buf != "") // added fix
                         Rec_counter_formulas(buf, ref lexemes);
                 }
-                if ((formula[1] >= 'A' && formula[1] <= 'Z') || formula[0] == '1' || formula[0] == '0')
+                if ((formula[1] >= 'A' && formula[1] <= 'Z') || formula[1] == '1' || formula[1] == '0')
                 {
                     if (lexemes.IndexOf(formula[1].ToString()) == -1)
                     {
