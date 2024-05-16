@@ -2,14 +2,12 @@
 using InputExc;
 using System;
 namespace Menu
-{
+{// Сделано студентами гр 221702 Чапля Михаил и Алексей Марченко
+ // Вариант 10 - подсчитать количество (различных) подформул в формуле сокращенного языка логики высказываний
     class Menu
     {
         static void Main(string[] args)
         {
-            //Formula_of_abbreviated_statement_logic a = new("((!(((A->(!B))~(C\\/D))/\\((!E)~(F->(!G)))))->(N/\\(K\\/L)))");
-            //a.Print_subformulas();
-            //a.Print_count_of_subformulas();
             Console.WriteLine("Сделано студентами группы 221702: Алексей Марченко и Чапля Михаил");
             Random rand = new Random();
             string choose_1 = "";
@@ -54,4 +52,4 @@ namespace Menu
         }
 
     }
-}
+} 

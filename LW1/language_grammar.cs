@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FALSL
-{// Сделано Михаилом Чаплей и Алексеем Марченко
+{// Сделано Михаилом Чаплей и Алексеем Марченко 
+   //Класс проверки на грамматику
     public class Language_grammar
     {
         public Language_grammar(string formula, ref List<string> lexemes)
@@ -41,7 +42,7 @@ namespace FALSL
                 }
             }
         }
-        public void Check(ref List<string> lexemes)
+        public void Check(ref List<string> lexemes) // основное тело проверки
         {
             try
             {
@@ -56,11 +57,11 @@ namespace FALSL
                 throw new Exception(e.Message);
             }
         }
-        private void Check_grammar(List<string> lexemes)
+        private void Check_grammar(List<string> lexemes) // проверка на ввод неправильной грамматики
         {   
             int counter = 0;
             int open_brackets_counter = 0, close_brackets_counter = 0, ops_counter = 0;
-    
+                
                 for (int i = 0; i < lexemes[0].Length; i++)
                 {
                     if ((lexemes[0][i] >= 'а' && lexemes[0][i] <= 'я') || (lexemes[0][i] >= 'А' && lexemes[0][i] <= 'Я'))
@@ -75,6 +76,24 @@ namespace FALSL
                 if ((ops_counter != (open_brackets_counter + close_brackets_counter) / 2) || (open_brackets_counter != close_brackets_counter))
                     throw new Exception("Ошибка: формула не соответствует грамматике!");
             // если количество пар скобок не совпадает с количеством операций, тогда есть грамматическая ошибка
+            int letter_count = 0, spec_ops_counter = 1; 
+            
+                for (int i = 0; i < lexemes[0].Length; i++)
+                {
+                    if (Convert.ToChar(lexemes[0][i]) >= 'A' && Convert.ToChar(lexemes[0][i]) <= 'Z' || (lexemes[0][i] == '0' || lexemes[0][i] == '1'))
+                    letter_count++;
+                    if(spec_ops_counter > 0 )
+                    {
+                        if(lexemes[0][i] == '~' || lexemes[0][i] == '>' || lexemes[0][i] == '/' || Convert.ToChar(lexemes[0][i]) == '\\')
+                        {
+                            spec_ops_counter++;
+                        }
+                        
+                    }
+                    
+                }
+                if(letter_count != spec_ops_counter)
+                    throw new Exception("Ошибка: формула не соответствует грамматике!");
                 if (lexemes[0].Length > 1)
                 {
                     if ((Convert.ToChar(lexemes[0][0]) >= 'A' && Convert.ToChar(lexemes[0][0]) <= 'Z') && ((Convert.ToChar(lexemes[0][1]) >= 'A' && Convert.ToChar(lexemes[0][1]) <= 'Z') || char.IsNumber(lexemes[0][1])))
@@ -84,6 +103,9 @@ namespace FALSL
                 }
                 for (int i = 0; i < lexemes[0].Length; i++)
                 {
+                if (lexemes[0].Length != 1 && i >=1)
+                    if ((lexemes[0][i] == '/' || lexemes[0][i] == '\\'|| lexemes[0][i] == '~' || lexemes[0][i] == '>') && lexemes[0][i-1] == '(')
+                        throw new Exception("Ошибка: формула не соответствует грамматике!");// MB LASTFIX &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
                 if (i != lexemes[0].Length - 1)
                     if((lexemes[0][i] == '0' || lexemes[0][i] == '1') && (lexemes[0][i+1] == '0' || lexemes[0][i+1] == '1'))
                         throw new Exception("Ошибка: формула не соответствует грамматике!");//LASTFIX
@@ -177,7 +199,7 @@ namespace FALSL
            
 
         }
-        private void Rec_counter_formulas(string formula, ref List<string> lexemes)
+        private void Rec_counter_formulas(string formula, ref List<string> lexemes) //  подсчет подформул
         {  
             
             string buf = "";
@@ -267,3 +289,18 @@ namespace FALSL
         }
     }
 }
+
+
+
+
+//if(spec_ops_counter == 0)
+//{
+//if (lexemes[0][i] == '~' || lexemes[0][i] == '>' || lexemes[0][i] == '/' || Convert.ToChar(lexemes[0][i]) == '\\')
+//{
+//    spec_ops_counter+=2;
+//}
+//if (lexemes[0][i] == '!')
+//{
+//spec_ops_counter++;
+//}
+//}

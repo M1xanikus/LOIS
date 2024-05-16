@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using InputExc;
 namespace FALSL
 {// Сделано Михаилом Чаплей и Алексеем Марченко
+    // Класс для хранения формулы сокращенного языка логики высказываний
     public class Formula_of_abbreviated_statement_logic
     {
         public Formula_of_abbreviated_statement_logic(string formula) 
@@ -25,7 +26,7 @@ namespace FALSL
         private List<string> _lexemes = new List<string>();
         private string _error_text = "";
         private int _count_of_subformulas;
-        private void Recover_lexs()
+        private void Recover_lexs() 
         {
             for (int i = 0; i < _lexemes.Count; i++)
             {

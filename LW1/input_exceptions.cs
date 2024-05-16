@@ -11,23 +11,39 @@ namespace InputExc
         public InputExceptions(ref string formula) 
         {
             try
-            {
+            {   
                 if (formula == "") throw new ArgumentException("Ошибка ввода: введённая строка пустая!");
                 if (formula.All(c => c == ' ')) throw new ArgumentException("Ошибка ввода: строка заполнена пробелами!");
                 for (int i = 0; i < formula.Length; i++)
                 {
                     if (formula[i] == ' ')
                     {
-                        formula = formula.Replace(" ", "");
-                        break;
+                        throw new ArgumentException("Ошибка ввода: строка имеет пробелы!");
                     }
+                }
+                try
+                {
+                    for (int i = 0; i < formula.Length && formula.Length > 2; i++)
+                    {
+                        if (formula[i] == '>' && formula[i - 1] != '-')
+                            throw new ArgumentException("Ошибка: формула не соответствует грамматике!");
+                        if (formula[i] == '/' && formula[i - 1] != '\\' && formula[i + 1] != '\\')
+                            throw new ArgumentException("Ошибка: формула не соответствует грамматике!");
+                        if (formula[i] == '\\' && formula[i - 1] != '/' && formula[i + 1] != '/')
+                            throw new ArgumentException("Ошибка: формула не соответствует грамматике!");
+                        if ((formula[i] == '\\'|| formula[i] == '/') && (formula[i-1] == '/' || formula[i-1] == '\\') && (formula[i+1] == '\\' || formula[i+1] == '/'))
+                            throw new ArgumentException("Ошибка: формула не соответствует грамматике!");
+                    }
+                }
+                catch(IndexOutOfRangeException e)
+                {
+                    throw new ArgumentOutOfRangeException("Ошибка: выход за пределы массива при выполнении!", e);
                 }
                 for (int i = 0; i < formula.Length; i++)
                 {
                     if (formula[i] == '\t')
                     {
-                        formula = formula.Replace("\t", "");
-                        break;
+                        throw new ArgumentException("Ошибка ввода: строка имеет табуляцию!");
                     }
                 }
             }
